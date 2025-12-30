@@ -1,4 +1,6 @@
 pandas
 scikit-learn
 sqlite3
+fastapi
+uvicorn
 
