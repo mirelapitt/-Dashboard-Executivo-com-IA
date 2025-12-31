@@ -1,26 +1,22 @@
 from fastapi import FastAPI
-import pandas as pd
+from fastapi.middleware.cors import CORSMiddleware
 
-app = FastAPI()
+app = FastAPI(title="API Financeira - Dashboard Executivo")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/financeiro")
-def get_financeiro():
-    df = pd.read_csv("../data/financeiro_tratado.csv")
-    return df.to_dict(orient="records")
-
-@app.get("/insights")
-def get_insights():
+def financeiro():
     return [
-        {
-            "tipo": "positivo",
-            "titulo": "Crescimento de Receita",
-            "descricao": "Receita acima da média histórica",
-            "impacto": "Alto"
-        },
-        {
-            "tipo": "alerta",
-            "titulo": "Custo Operacional",
-            "descricao": "Custos cresceram mais rápido que a receita",
-            "impacto": "Médio"
-        }
+        {"mes": "Jan", "receita": 450000, "despesas": 320000, "lucro": 130000},
+        {"mes": "Fev", "receita": 480000, "despesas": 340000, "lucro": 140000},
+        {"mes": "Mar", "receita": 520000, "despesas": 360000, "lucro": 160000},
+        {"mes": "Abr", "receita": 490000, "despesas": 350000, "lucro": 140000},
     ]
+

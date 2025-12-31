@@ -1,56 +1,34 @@
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 function App() {
   const [dados, setDados] = useState([]);
-  const [insights, setInsights] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/financeiro")
-      .then(res => res.json())
-      .then(data => setDados(data));
-
-    fetch("http://127.0.0.1:8000/insights")
-      .then(res => res.json())
-      .then(data => setInsights(data));
+    axios
+      .get("http://127.0.0.1:8000/financeiro")
+      .then((response) => {
+        setDados(response.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Erro ao buscar dados:", error);
+        setLoading(false);
+      });
   }, []);
 
+  if (loading) {
+    return <h2 style={{ padding: 20 }}>Carregando dados do backend...</h2>;
+  }
+
   return (
-    <div style={{ padding: 20 }}>
-      <h1>Dashboard Executivo com IA</h1>
-
-      <h2>Financeiro</h2>
-      <table border="1" cellPadding="5">
-        <thead>
-          <tr>
-            <th>Mês</th>
-            <th>Receita</th>
-            <th>Custo</th>
-            <th>Previsão</th>
-          </tr>
-        </thead>
-        <tbody>
-          {dados.map((row, idx) => (
-            <tr key={idx}>
-              <td>{row.mes}</td>
-              <td>{row.receita}</td>
-              <td>{row.custo}</td>
-              <td>{Math.round(row.previsao_receita)}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      <h2>Insights IA</h2>
-      <ul>
-        {insights.map((i, idx) => (
-          <li key={idx}>
-            <strong>{i.titulo}</strong> — {i.descricao} ({i.impacto})
-          </li>
-        ))}
-      </ul>
+    <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center">
+      <h1 className="text-4xl font-bold">
+        Dashboard Executivo 🚀
+      </h1>
     </div>
-  );
+  )
 }
-
 export default App;
 
