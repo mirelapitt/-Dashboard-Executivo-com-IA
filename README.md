@@ -152,7 +152,7 @@ O frontend estará disponível em: `http://localhost:5173`
 ## 🎨 Capturas de Tela
 
 ### Dashboard Principal
-![Dashboard Principal](./screenshots/dashboard-principal.png)
+![Dashboard Principal](./screenshots/dashborard-principal.png)
 *Cards KPI interativos com métricas principais e indicadores de tendência.*
 
 ### Resumo Financeiro
