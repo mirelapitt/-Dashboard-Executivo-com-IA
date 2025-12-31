@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Executivo</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #fafafa 0%, #f3f4f6 100%);
+      min-height: 100vh;
+    }
+
+    .loading-container {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #1a1a2e 0%, #6b21a8 50%, #1a1a2e 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .spinner {
+      border: 4px solid transparent;
+      border-top: 4px solid #a78bfa;
+      border-bottom: 4px solid #a78bfa;
+      border-radius: 50%;
+      width: 80px;
+      height: 80px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .loading-text {
+      margin-top: 24px;
+      font-size: 24px;
+      font-weight: bold;
+      color: white;
+      text-align: center;
+    }
+
+    header {
+      background: linear-gradient(90deg, #7c3aed 0%, #8b5cf6 50%, #6366f1 100%);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    }
+
+    .header-content {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .header-title {
+      font-size: 36px;
+      font-weight: 900;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 8px;
+    }
+
+    .header-subtitle {
+      color: #e9d5ff;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .period-badge {
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      padding: 12px 24px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .period-label {
+      color: white;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+
+    .period-value {
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    main {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 40px 32px;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 32px;
+      margin-bottom: 40px;
+    }
+
+    .kpi-card {
+      border-radius: 16px;
+      padding: 32px;
+      color: white;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+
+    .kpi-card:hover {
+      transform: scale(1.05);
+    }
+
+    .kpi-card-1 {
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      box-shadow: 0 20px 40px rgba(59, 130, 246, 0.4);
+    }
+
+    .kpi-card-2 {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      box-shadow: 0 20px 40px rgba(16, 185, 129, 0.4);
+    }
+
+    .kpi-card-3 {
+      background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
+      box-shadow: 0 20px 40px rgba(236, 72, 153, 0.4);
+    }
+
+    .kpi-card-4 {
+      background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+      box-shadow: 0 20px 40px rgba(6, 182, 212, 0.4);
+    }
+
+    .kpi-bg-circle {
+      position: absolute;
+      width: 160px;
+      height: 160px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 50%;
+    }
+
+    .kpi-bg-circle-1 {
+      top: -40px;
+      right: -40px;
+    }
+
+    .kpi-bg-circle-2 {
+      bottom: -40px;
+      left: -40px;
+    }
+
+    .kpi-content {
+      position: relative;
+      z-index: 10;
+    }
+
+    .kpi-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .kpi-label {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 11px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .kpi-value {
+      font-size: 48px;
+      font-weight: 900;
+      margin-bottom: 12px;
+    }
+
+    .kpi-emoji {
+      font-size: 64px;
+      opacity: 0.2;
+    }
+
+    .kpi-footer {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .kpi-arrow {
+      font-size: 24px;
+    }
+
+    .kpi-change {
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(5px);
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .kpi-subtext {
+      font-size: 11px;
+      opacity: 0.8;
+      margin-left: 4px;
+    }
+
+    .summary-card {
+      background: white;
+      border-radius: 24px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+      padding: 40px;
+      margin-bottom: 40px;
+      border: 1px solid #f3f4f6;
+    }
+
+    .summary-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    .summary-title {
+      font-size: 28px;
+      font-weight: 900;
+      color: #1f2937;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 32px;
+    }
+
+    .summary-item {
+      padding: 32px;
+      border-radius: 16px;
+      transition: box-shadow 0.3s ease;
+    }
+
+    .summary-item:hover {
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    }
+
+    .summary-item-1 {
+      background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+      border-left: 4px solid #3b82f6;
+    }
+
+    .summary-item-2 {
+      background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+      border-left: 4px solid #ef4444;
+    }
+
+    .summary-item-3 {
+      background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+      border-left: 4px solid #10b981;
+    }
+
+    .summary-item-4 {
+      background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
+      border-left: 4px solid #8b5cf6;
+    }
+
+    .summary-label {
+      font-size: 12px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+
+    .summary-value {
+      font-size: 32px;
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+
+    .summary-description {
+      font-size: 11px;
+      font-weight: 500;
+    }
+
+    .summary-item-1 .summary-label { color: #1e40af; }
+    .summary-item-1 .summary-value { color: #1e3a8a; }
+    .summary-item-1 .summary-description { color: #2563eb; }
+
+    .summary-item-2 .summary-label { color: #991b1b; }
+    .summary-item-2 .summary-value { color: #7f1d1d; }
+    .summary-item-2 .summary-description { color: #dc2626; }
+
+    .summary-item-3 .summary-label { color: #065f46; }
+    .summary-item-3 .summary-value { color: #064e3b; }
+    .summary-item-3 .summary-description { color: #059669; }
+
+    .summary-item-4 .summary-label { color: #6b21a8; }
+    .summary-item-4 .summary-value { color: #581c87; }
+    .summary-item-4 .summary-description { color: #7c3aed; }
+
+    .table-card {
+      background: white;
+      border-radius: 24px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+      overflow: hidden;
+      border: 1px solid #f3f4f6;
+    }
+
+    .table-header {
+      background: linear-gradient(90deg, #7c3aed 0%, #6366f1 100%);
+      padding: 32px 40px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .table-title {
+      font-size: 28px;
+      font-weight: 900;
+      color: white;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead {
+      background: linear-gradient(90deg, #f9fafb 0%, #f3f4f6 100%);
+    }
+
+    th {
+      padding: 24px 32px;
+      text-align: left;
+      font-size: 12px;
+      font-weight: 900;
+      color: #374151;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid #f3f4f6;
+      transition: background-color 0.2s ease;
+    }
+
+    tbody tr:nth-child(even) {
+      background: #fafafa;
+    }
+
+    tbody tr:hover {
+      background: #faf5ff;
+    }
+
+    td {
+      padding: 24px 32px;
+    }
+
+    .td-month {
+      font-size: 16px;
+      font-weight: 900;
+      color: #111827;
+    }
+
+    .td-receita {
+      font-size: 15px;
+      font-weight: bold;
+      color: #2563eb;
+    }
+
+    .td-despesas {
+      font-size: 15px;
+      font-weight: bold;
+      color: #dc2626;
+    }
+
+    .td-lucro {
+      font-size: 15px;
+      font-weight: 900;
+      color: #059669;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: bold;
+      color: white;
+    }
+
+    .badge-clientes {
+      background: linear-gradient(90deg, #8b5cf6 0%, #7c3aed 100%);
+    }
+
+    .badge-pedidos {
+      background: linear-gradient(90deg, #06b6d4 0%, #0891b2 100%);
+    }
+
+    footer {
+      background: linear-gradient(90deg, #1f2937 0%, #111827 100%);
+      margin-top: 64px;
+    }
+
+    .footer-content {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-text {
+      color: #9ca3af;
+      font-size: 14px;
+    }
+
+    .footer-powered {
+      color: #6b7280;
+      font-size: 12px;
+    }
+
+    @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .kpi-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .summary-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    function App() {
+      const [dadosFinanceiros, setDadosFinanceiros] = useState(null);
+      const [kpis, setKpis] = useState([]);
+      const [loading, setLoading] = useState(true);
+
+      useEffect(() => {
+        fetch("http://127.0.0.1:8000/financeiro")
+          .then((response) => response.json())
+          .then((data) => {
+            setDadosFinanceiros(data);
+            console.log("Dados recebidos:", data);
+          })
+          .catch((error) => {
+            console.error("Erro ao buscar dados financeiros:", error);
+          });
+
+        fetch("http://127.0.0.1:8000/kpis")
+          .then((response) => response.json())
+          .then((data) => {
+            setKpis(data.kpis);
+            setLoading(false);
+          })
+          .catch((error) => {
+            console.error("Erro ao buscar KPIs:", error);
+            setLoading(false);
+          });
+      }, []);
+
+      if (loading) {
+        return (
+          <div className="loading-container">
+            <div style={{ textAlign: 'center' }}>
+              <div className="spinner"></div>
+              <h2 className="loading-text">Carregando Dashboard...</h2>
+            </div>
+          </div>
+        );
+      }
+
+      const emojiMap = {
+        "Receita Total": "💰",
+        "Novos Clientes": "👥",
+        "Pedidos": "🛒",
+        "Taxa de Conversão": "📈"
+      };
+
+      return (
+        <div>
+          <header>
+            <div className="header-content">
+              <div>
+                <h1 className="header-title">
+                  <span style={{ fontSize: '48px' }}>📊</span>
+                  Dashboard Executivo
+                </h1>
+                <p className="header-subtitle">Análise Financeira e Operacional</p>
+              </div>
+              <div className="period-badge">
+                <p className="period-label">Período</p>
+                <p className="period-value">Dezembro 2025</p>
+              </div>
+            </div>
+          </header>
+
+          <main>
+            <div className="kpi-grid">
+              {kpis.map((kpi, index) => {
+                const emoji = emojiMap[kpi.title] || "💰";
+                const isPositive = kpi.trend === "up";
+                
+                return (
+                  <div key={index} className={`kpi-card kpi-card-${index + 1}`}>
+                    <div className="kpi-bg-circle kpi-bg-circle-1"></div>
+                    <div className="kpi-bg-circle kpi-bg-circle-2"></div>
+                    
+                    <div className="kpi-content">
+                      <div className="kpi-header">
+                        <div>
+                          <p className="kpi-label">{kpi.title}</p>
+                          <p className="kpi-value">{kpi.value}</p>
+                        </div>
+                        <span className="kpi-emoji">{emoji}</span>
+                      </div>
+                      
+                      <div className="kpi-footer">
+                        <span className="kpi-arrow">{isPositive ? "↗" : "↘"}</span>
+                        <span className="kpi-change">{kpi.change}</span>
+                        <span className="kpi-subtext">vs mês anterior</span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {dadosFinanceiros && dadosFinanceiros.resumo && (
+              <div className="summary-card">
+                <div className="summary-header">
+                  <span style={{ fontSize: '48px' }}>💎</span>
+                  <h2 className="summary-title">Resumo Financeiro</h2>
+                </div>
+                
+                <div className="summary-grid">
+                  <div className="summary-item summary-item-1">
+                    <p className="summary-label">💵 Receita Total</p>
+                    <p className="summary-value">
+                      R$ {dadosFinanceiros.resumo.total_receita.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    </p>
+                    <p className="summary-description">Janeiro a Dezembro</p>
+                  </div>
+                  
+                  <div className="summary-item summary-item-2">
+                    <p className="summary-label">💸 Despesas Total</p>
+                    <p className="summary-value">
+                      R$ {dadosFinanceiros.resumo.total_despesas.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    </p>
+                    <p className="summary-description">Custos operacionais</p>
+                  </div>
+                  
+                  <div className="summary-item summary-item-3">
+                    <p className="summary-label">✅ Lucro Total</p>
+                    <p className="summary-value">
+                      R$ {dadosFinanceiros.resumo.total_lucro.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    </p>
+                    <p className="summary-description">Resultado líquido</p>
+                  </div>
+                  
+                  <div className="summary-item summary-item-4">
+                    <p className="summary-label">📊 Margem de Lucro</p>
+                    <p className="summary-value">
+                      {dadosFinanceiros.resumo.margem_lucro}%
+                    </p>
+                    <p className="summary-description">Performance geral</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {dadosFinanceiros && dadosFinanceiros.dados && (
+              <div className="table-card">
+                <div className="table-header">
+                  <span style={{ fontSize: '48px' }}>📈</span>
+                  <h2 className="table-title">Análise Mensal Detalhada</h2>
+                </div>
+                
+                <div style={{ overflowX: 'auto' }}>
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Mês</th>
+                        <th>Receita</th>
+                        <th>Despesas</th>
+                        <th>Lucro</th>
+                        <th>Clientes</th>
+                        <th>Pedidos</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {dadosFinanceiros.dados.map((item, index) => (
+                        <tr key={index}>
+                          <td className="td-month">{item.mes}</td>
+                          <td className="td-receita">
+                            R$ {item.receita.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                          </td>
+                          <td className="td-despesas">
+                            R$ {item.despesas.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                          </td>
+                          <td className="td-lucro">
+                            R$ {item.lucro.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                          </td>
+                          <td>
+                            <span className="badge badge-clientes">
+                              {item.clientes.toLocaleString('pt-BR')}
+                            </span>
+                          </td>
+                          <td>
+                            <span className="badge badge-pedidos">
+                              {item.pedidos.toLocaleString('pt-BR')}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+          </main>
+
+          <footer>
+            <div className="footer-content">
+              <p className="footer-text">
+                Dashboard Executivo © 2025 • Desenvolvido para análise de dados financeiros e operacionais
+              </p>
+              <p className="footer-powered">
+                Powered by React + FastAPI
+              </p>
+            </div>
+          </footer>
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>

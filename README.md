@@ -4,7 +4,7 @@
 ![React](https://img.shields.io/badge/React-18.3.1-blue)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.115.5-green)
 ![Python](https://img.shields.io/badge/Python-3.12-yellow)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4.17-cyan)
+![CSS3](https://img.shields.io/badge/CSS3-Modern-cyan)
 
 Dashboard executivo desenvolvido para análise financeira e operacional com inteligência artificial, integrando frontend React com backend Python/FastAPI. Projeto focado em reduzir o tempo de entrega de relatórios executivos através de automação e insights preditivos.
 
@@ -36,9 +36,9 @@ Desenvolver uma solução completa de Business Intelligence que automatiza a an�
 
 ### Frontend
 - **React 18.3.1**: Framework JavaScript para interfaces dinâmicas
-- **Tailwind CSS 3.4.17**: Framework CSS para estilização moderna
+- **CSS3 Moderno**: Estilização com gradientes, animações e efeitos avançados
 - **Vite 6.0.1**: Build tool de alta performance
-- **Axios**: Biblioteca para requisições HTTP
+- **Fetch API**: Requisições HTTP nativas
 
 ### Backend
 - **Python 3.12**: Linguagem de programação principal
@@ -67,12 +67,12 @@ Dashboard-Executivo-com-IA/
     └── react-dashboard/
         ├── src/
         │   ├── App.jsx
-        │   ├── main.jsx
-        │   └── index.css
+        │   ├── Dashboard.css
+        │   └── main.jsx
+        ├── public/
         ├── package.json
         ├── vite.config.js
-        ├── tailwind.config.js
-        └── postcss.config.js
+        └── index.html
 ```
 
 ## 🚀 Como Executar o Projeto
@@ -152,13 +152,16 @@ O frontend estará disponível em: `http://localhost:5173`
 ## 🎨 Capturas de Tela
 
 ### Dashboard Principal
-Cards KPI interativos com métricas principais e indicadores de tendência.
+![Dashboard Principal](./screenshots/dashboard-principal.png)
+*Cards KPI interativos com métricas principais e indicadores de tendência.*
 
 ### Resumo Financeiro
-Análise consolidada de receitas, despesas, lucros e margem de lucro anual.
+![Resumo Financeiro](./screenshots/resumo-financeiro.png)
+*Análise consolidada de receitas, despesas, lucros e margem de lucro anual.*
 
 ### Tabela Analítica
-Dados mensais detalhados com formatação condicional e visualização clara.
+![Tabela Analítica](./screenshots/tabela-analitica.png)
+*Dados mensais detalhados com formatação condicional e visualização clara.*
 
 ## 🔧 Possíveis Melhorias Futuras
 
@@ -178,7 +181,7 @@ Dados mensais detalhados com formatação condicional e visualização clara.
 - GitHub: [@mirelapitt](https://github.com/mirelapitt)
 - Portfolio: Analista de Dados com foco em AI-Driven Analytics
 
-## 📝 Licença
+## 📄 Licença
 
 Este projeto foi desenvolvido como projeto de portfólio e está disponível para fins educacionais.
 
@@ -188,7 +191,7 @@ Projeto desenvolvido como demonstração de habilidades em:
 - Desenvolvimento Full Stack (React + Python)
 - Análise de Dados e Business Intelligence
 - Integração de Inteligência Artificial
-- Design de Interfaces Modernas
+- Design de Interfaces Modernas com CSS3
 - Automação de Processos Analíticos
 
 ---
